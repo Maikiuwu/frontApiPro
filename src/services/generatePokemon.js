@@ -1,7 +1,7 @@
 async function generatePokemon() {
-  const resp = await fetch('http://localhost:3000/generatePokemon');
+  const resp = await fetch('http://localhost:8083/api/pokemon/random');
   if (!resp.ok) throw new Error('Error generating Pokemon');
-  return resp.json(); // aquí ya obtienes { id, name, image, types }
+  return resp.json(); // aquí se obtienes { id, name, image, types }
 }
 
 export default generatePokemon

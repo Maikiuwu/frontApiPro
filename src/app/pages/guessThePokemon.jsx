@@ -66,25 +66,29 @@ function App() {
   }
   console.log('success', success)
   return (
-    <main className="gap-5 bg-gray-800 text-white flex flex-col justify-center items-center h-screen">
+    <main className="gap-5 bg-gray-800 text-white flex flex-col justify-center items-center h-screen overflow-hidden">
       <h1 className="text-6xl font-bold">Guess Pokémon</h1>
-      <div className="container p-4 max-w-4xl justify-center items-center flex flex-col gap-5">
+      <div className="container p-4 max-w-xs justify-center items-center flex flex-col gap-5">
         {loading ? (
           <p>Cargando Pokémon...</p>
         ) : (
-          <div className="flex flex-col justify-center items-center p-4 w-full bg-gray-700 rounded-3xl shadow-xl min-h-[600px]">
+          <div className="flex flex-col justify-center items-center p-4 w-full bg-gray-700 rounded-3xl shadow-xl">
             {success && (
-              <h2 className="text-4xl font-bold text-balance text-center mb-4">
+              <h2 className="text-2xl font-bold text-balance text-center mb-4 text-green-400" >
                 Felicidades, el pokemon era {name}
               </h2>
             )}
+            {!success && (
+              <h2 className="text-4xl font-bold text-balance text-center mb-4 ">
+                ¿Quien es este pokemon?
+              </h2>
+            )}
+
             {image && (
               <img
                 src={image}
-                alt={success ? name : 'Pokémon oculto'}
-                className={`max-w-4/5 transition-all duration-500 brightness-${
-                  success ? '100' : '0'
-                }`}
+                alt={success ? name : "Nombre Pokemon "+name}
+                className={`max-w-4/5 transition-all duration-500 brightness-${success ? '100' : '0'}`}
               />
             )}
           </div>
@@ -131,7 +135,7 @@ function App() {
           showErrorModal ? 'opacity-100' : ''
         }`}
       >
-        <h2>Error</h2>
+        <h2>Que noob</h2>
       </div>
     </main>
   )
