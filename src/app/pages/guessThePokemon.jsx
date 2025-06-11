@@ -88,7 +88,8 @@ function App() {
               <img
                 src={image}
                 alt={success ? name : "Nombre Pokemon "+name}
-                className={`max-w-4/5 transition-all duration-500 brightness-${success ? '100' : '0'}`}
+                className={`max-w-4/5 transition-all duration-500 ${success ? 'brightness-100' : 'brightness-0'}`}
+
               />
             )}
           </div>
