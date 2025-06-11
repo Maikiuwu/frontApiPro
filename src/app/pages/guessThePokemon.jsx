@@ -1,6 +1,6 @@
 import generatePokemon from '../../services/generatePokemon'
 import { useState, useEffect } from 'react'
-import guessPokemon from '../../services/guessPokemon'
+
 import JSConfetti from 'js-confetti'
 
 const jsConfetti = new JSConfetti()
@@ -27,32 +27,52 @@ function App() {
       setLoading(false)
     }
   }
+  /*const handleGuess = async (name) => {
+  if (!name) return;
+  setSuccess(false);
+  try {
+    const res = await guessPokemon(name);
 
-  const handleGuess = async (name) => {
-    if (!name) return
-    setSuccess(false)
-    try {
-      const res = await guessPokemon(name)
+    const { correct } = res;
 
-      const { correct } = res
-
-      if (correct) {
-        setSuccess(true)
-        setValue('')
-        jsConfetti.addConfetti()
-        return
-      }
-
-      setValue('')
-      setShowErrorModal(true)
-
-      setTimeout(() => {
-        setShowErrorModal(false)
-      }, 1500)
-    } catch (error) {
-      console.error('Error guessing Pokemon:', error)
+    if (correct) {
+      setSuccess(true);
+      setValue('');
+      jsConfetti.addConfetti();
+      return;
     }
+
+    setValue('');
+    setShowErrorModal(true);
+
+    setTimeout(() => {
+      setShowErrorModal(false);
+    }, 1500);
+  } catch (error) {
+    console.error('Error guessing Pokemon:', error);
   }
+};
+ */
+
+const handleGuess = (inputName) => {
+  if (!inputName) return;
+  setSuccess(false);
+
+  const isCorrect = inputName.trim().toLowerCase() === name.toLowerCase();
+
+  if (isCorrect) {
+    setSuccess(true);
+    setValue('');
+    jsConfetti.addConfetti();
+  } else {
+    setValue('');
+    setShowErrorModal(true);
+    setTimeout(() => {
+      setShowErrorModal(false);
+    }, 1500);
+  }
+};
+
 
   // Cargar un Pokémon cuando se inicia la aplicación
   useEffect(() => {
