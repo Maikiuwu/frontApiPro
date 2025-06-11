@@ -12,7 +12,7 @@ export default function Register() {
     password: ''
   });
   const [message, setMessage] = useState('');
-  const navigate = useNavigate(); // 👈 para redirigir
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     setFormData({...formData, [e.target.name]: e.target.value});
@@ -23,27 +23,74 @@ export default function Register() {
     try {
       const result = await registerUser(formData);
       console.log(result);
-      setMessage('Usuario registrado con éxito');
+      setMessage('✅ Usuario registrado con éxito');
 
-      // Redirige al login después de 1 segundo (opcional)
       setTimeout(() => navigate('/login'), 1000);
     } catch (err) {
-      setMessage(`Error: ${err.message}`);
+      setMessage(`❌ Error: ${err.message}`);
     }
   };
 
   return (
-    <div className="register-container bg-gray-800">
-      <h2>Registro de Usuario</h2>
-      <form onSubmit={handleSubmit}>
-        <input name="name" placeholder="Nombre" value={formData.name} onChange={handleChange} required /><br />
-        <input name="lastName" placeholder="Apellido" value={formData.lastName} onChange={handleChange} required /><br />
-        <input name="username" placeholder="Nombre de usuario" value={formData.username} onChange={handleChange} required /><br />
-        <input name="email" placeholder="Email" type="email" value={formData.email} onChange={handleChange} required /><br />
-        <input name="password" placeholder="Contraseña" type="password" value={formData.password} onChange={handleChange} required /><br />
-        <button type="submit">Registrarse</button>
-      </form>
-      <p>{message}</p>
+    <div className="min-h-screen flex items-center justify-center bg-gray-900">
+      <div className="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-lg w-full max-w-md">
+        <h2 className="text-2xl font-bold mb-6 text-center text-gray-800 dark:text-white">Registro de Usuario</h2>
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <input
+            name="name"
+            placeholder="Nombre"
+            value={formData.name}
+            onChange={handleChange}
+            required
+            className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-50 dark:bg-gray-700 text-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+          <input
+            name="lastName"
+            placeholder="Apellido"
+            value={formData.lastName}
+            onChange={handleChange}
+            required
+            className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-50 dark:bg-gray-700 text-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+          <input
+            name="username"
+            placeholder="Nombre de usuario"
+            value={formData.username}
+            onChange={handleChange}
+            required
+            className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-50 dark:bg-gray-700 text-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+          <input
+            name="email"
+            type="email"
+            placeholder="Email"
+            value={formData.email}
+            onChange={handleChange}
+            required
+            className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-50 dark:bg-gray-700 text-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+          <input
+            name="password"
+            type="password"
+            placeholder="Contraseña"
+            value={formData.password}
+            onChange={handleChange}
+            required
+            className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-50 dark:bg-gray-700 text-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+          <button
+            type="submit"
+            className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 rounded-md transition duration-300"
+          >
+            Registrarse
+          </button>
+        </form>
+        {message && (
+          <p className="mt-4 text-center text-sm text-white bg-gray-700 p-2 rounded-md">
+            {message}
+          </p>
+        )}
+      </div>
     </div>
   );
 }
