@@ -1,4 +1,5 @@
 import generatePokemon from '../../services/generatePokemon'
+import GuardarIntentos from '../../services/GuardarIntentos'
 import { useState, useEffect } from 'react'
 
 import JSConfetti from 'js-confetti'
@@ -12,10 +13,12 @@ function App() {
   const [success, setSuccess] = useState(false)
   const [value, setValue] = useState('')
   const [showErrorModal, setShowErrorModal] = useState(false)
+  const [contador, setContador] = useState(1)
+  const [formData, setFormData] = useState({user: 0, pokemonName: '', spriteUrl: '', attempts: 1})
 
   const fetchPokemon = async () => {
     try {
-      setLoading(true)
+      setLoading(true)  
       const result = await generatePokemon()
       if (result) {
         setName(result.name)
@@ -54,16 +57,32 @@ function App() {
 };
  */
 
+
 const handleGuess = (inputName) => {
   if (!inputName) return;
+  setContador(contador + 1);
   setSuccess(false);
 
   const isCorrect = inputName.trim().toLowerCase() === name.toLowerCase();
 
   if (isCorrect) {
+
+    const user = JSON.parse(localStorage.getItem('user'));
+
+   const newFormData ={
+      user: user,
+      pokemonName: name,
+      spriteUrl: image,
+      attempts: contador + 1
+    };
     setSuccess(true);
-    setValue('');
     jsConfetti.addConfetti();
+    setFormData(newFormData);
+    console.log('formData', newFormData);
+    GuardarIntentos(newFormData);
+    setValue('');
+    setContador(0);
+
   } else {
     setValue('');
     setShowErrorModal(true);
@@ -72,6 +91,7 @@ const handleGuess = (inputName) => {
     }, 1500);
   }
 };
+
 
 
   // Cargar un Pokémon cuando se inicia la aplicación
@@ -83,6 +103,7 @@ const handleGuess = (inputName) => {
     setSuccess(false)
     setValue('')
     fetchPokemon()
+    setContador(0)
   }
   console.log('success', success)
   return (

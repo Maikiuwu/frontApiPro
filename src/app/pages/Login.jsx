@@ -61,6 +61,16 @@ export default function Login() {
             {message}
           </p>
         )}
+        <div className="mt-6 flex justify-center">
+          <span className="text-gray-600 dark:text-gray-300 mr-2">¿No tienes cuenta?</span>
+          <button
+            onClick={() => navigate('/register')}
+            className="text-blue-600 hover:underline font-semibold"
+            type="button"
+          >
+            Regístrate
+          </button>
+        </div>
       </div>
     </div>
   );

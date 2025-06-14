@@ -20,6 +20,10 @@ export default function Register() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (formData.password.length < 6) {
+      setMessage('❌ La contraseña debe tener al menos 6 caracteres');
+      return;
+    }
     try {
       const result = await registerUser(formData);
       console.log(result);
@@ -85,6 +89,16 @@ export default function Register() {
             Registrarse
           </button>
         </form>
+        <div className="mt-4 text-center">
+          <span className="text-gray-700 dark:text-gray-300">¿Ya tienes una cuenta? </span>
+          <button
+            onClick={() => navigate('/login')}
+            className="text-blue-600 hover:underline font-semibold"
+            type="button"
+          >
+            Inicia sesión
+          </button>
+        </div>
         {message && (
           <p className="mt-4 text-center text-sm text-white bg-gray-700 p-2 rounded-md">
             {message}
