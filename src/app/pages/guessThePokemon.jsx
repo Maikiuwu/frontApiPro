@@ -1,5 +1,6 @@
 import generatePokemon from '../../services/generatePokemon'
 import GuardarIntentos from '../../services/GuardarIntentos'
+import ActualizarScore from '../../services/ActualizarScore'
 import { useState, useEffect } from 'react'
 
 import JSConfetti from 'js-confetti'
@@ -14,11 +15,12 @@ function App() {
   const [value, setValue] = useState('')
   const [showErrorModal, setShowErrorModal] = useState(false)
   const [contador, setContador] = useState(1)
-  const [formData, setFormData] = useState({user: 0, pokemonName: '', spriteUrl: '', attempts: 1})
+  const [formData, setFormData] = useState({ user: 0, pokemonName: '', spriteUrl: '', attempts: 1 })
+  const [ranking, setRanking] = useState([])
 
   const fetchPokemon = async () => {
     try {
-      setLoading(true)  
+      setLoading(true)
       const result = await generatePokemon()
       if (result) {
         setName(result.name)
@@ -57,42 +59,47 @@ function App() {
 };
  */
 
+  useEffect(() => {
+    fetch('http://localhost:8083/api/users/ranking')
+      .then(res => res.json())
+      .then(data => setRanking(data))
+      .catch(() => setRanking([]));
+  }, []);
 
-const handleGuess = (inputName) => {
-  if (!inputName) return;
-  setContador(contador + 1);
-  setSuccess(false);
+  const handleGuess = (inputName) => {
+    if (!inputName) return;
+    setContador(contador + 1);
+    setSuccess(false);
 
-  const isCorrect = inputName.trim().toLowerCase() === name.toLowerCase();
+    const isCorrect = inputName.trim().toLowerCase() === name.toLowerCase();
 
-  if (isCorrect) {
+    if (isCorrect) {
 
-    const user = JSON.parse(localStorage.getItem('user'));
+      const user = JSON.parse(localStorage.getItem('user'));
 
-   const newFormData ={
-      user: user,
-      pokemonName: name,
-      spriteUrl: image,
-      attempts: contador + 1
-    };
-    setSuccess(true);
-    jsConfetti.addConfetti();
-    setFormData(newFormData);
-    console.log('formData', newFormData);
-    GuardarIntentos(newFormData);
-    setValue('');
-    setContador(0);
+      const newFormData = {
+        user: user,
+        pokemonName: name,
+        spriteUrl: image,
+        attempts: contador + 1
+      };
+      setSuccess(true);
+      jsConfetti.addConfetti();
+      setFormData(newFormData);
+      console.log('formData', newFormData);
+      GuardarIntentos(newFormData);
+      ActualizarScore(user);
+      setValue('');
+      setContador(0);
 
-  } else {
-    setValue('');
-    setShowErrorModal(true);
-    setTimeout(() => {
-      setShowErrorModal(false);
-    }, 1500);
-  }
-};
-
-
+    } else {
+      setValue('');
+      setShowErrorModal(true);
+      setTimeout(() => {
+        setShowErrorModal(false);
+      }, 1500);
+    }
+  };
 
   // Cargar un Pokémon cuando se inicia la aplicación
   useEffect(() => {
@@ -128,7 +135,7 @@ const handleGuess = (inputName) => {
             {image && (
               <img
                 src={image}
-                alt={success ? name : "Nombre Pokemon "+name}
+                alt={success ? name : "Nombre Pokemon " + name}
                 className={`max-w-4/5 transition-all duration-500 ${success ? 'brightness-100' : 'brightness-0'}`}
 
               />
@@ -173,11 +180,31 @@ const handleGuess = (inputName) => {
         </div>
       </div>
       <div
-        className={`flex flex-col gap-5 p-4 bg-red-500 size-40 absolute text-5xl justify-center items-center rounded-xl shadow-xl opacity-0 transition-opacity duration-300 z-10 ${
-          showErrorModal ? 'opacity-100' : ''
-        }`}
+        className={`flex flex-col gap-5 p-4 bg-red-500 size-40 absolute text-5xl justify-center items-center rounded-xl shadow-xl opacity-0 transition-opacity duration-300 z-10 ${showErrorModal ? 'opacity-100' : ''
+          }`}
       >
         <h2>Que noob</h2>
+      </div>
+      <div style={{ minWidth: 300, background: '#222', color: '#fff', borderRadius: 12, padding: 16, marginLeft: 32 }}>
+        <h2 style={{ textAlign: 'center', marginBottom: 12 }}>Top 10 Usuarios</h2>
+        <table style={{ width: '100%' }}>
+          <thead>
+            <tr>
+              <th className="text-left">#</th>
+              <th className="text-left">Usuario</th>
+              <th className="text-left">Score</th>
+            </tr>
+          </thead>
+          <tbody>
+            {ranking.map((user, idx) => (
+              <tr key={user.id || idx}>
+                <td>{idx + 1}</td>
+                <td>{user.username}</td>
+                <td>{user.score}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
     </main>
   )
