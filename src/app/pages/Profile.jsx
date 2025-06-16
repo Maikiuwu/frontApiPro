@@ -12,7 +12,6 @@ export default function Profile() {
 
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem('user'));
-    console.log('Usuario del localStorage:', user);
     
     if (!user || !user.idUser) {
       console.log('No hay usuario en localStorage');
@@ -25,7 +24,6 @@ export default function Profile() {
 
     getLastAttempts(user.idUser)
       .then(attempts => {
-        console.log('Datos de intentos recibidos:', attempts);
         setLastAttempts(attempts);
         // Obtener datos de cada Pokémon
         attempts.forEach(pokemon => {
@@ -40,15 +38,8 @@ export default function Profile() {
                 }
               }));
             })
-            .catch(error => {
-              console.error(`Error al obtener datos de ${pokemon}:`, error);
-            });
         });
       })
-      .catch(error => {
-        console.error('Error al obtener intentos:', error);
-        setError('Error al cargar los intentos recientes');
-      });
   }, [navigate]);
 
   if (loading) {
