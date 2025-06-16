@@ -99,7 +99,10 @@ export default function Profile() {
                 <p><span className="font-semibold">Nombre:</span> {userProfile.name || 'No disponible'} {userProfile.lastName || ''}</p>
                 <p><span className="font-semibold">Usuario:</span> {userProfile.username || 'No disponible'}</p>
                 <p><span className="font-semibold">Email:</span> {userProfile.email || 'No disponible'}</p>
-                <p><span className="font-semibold">Puntuación:</span> {userProfile.score || 0}</p>
+                <div className="bg-white/10 p-6 rounded-lg shadow-lg">
+                  <h3 className="text-xl font-semibold mb-2">Puntuación</h3>
+                  <p className="text-3xl font-bold text-yellow-400">{lastAttempts.length} Pokémon</p>
+                </div>
               </div>
             ) : (
               <p className="text-white">No se pudo cargar la información del perfil</p>
