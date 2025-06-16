@@ -3,7 +3,7 @@ import GuardarIntentos from '../../services/GuardarIntentos'
 import ActualizarScore from '../../services/ActualizarScore'
 import { useState, useEffect } from 'react'
 import getLastAttempts from '../../services/getLastAttempts'
-
+import { useNavigate } from 'react-router-dom' // <-- Agrega esto
 
 import JSConfetti from 'js-confetti'
 
@@ -20,6 +20,15 @@ function App() {
   const [formData, setFormData] = useState({ user: 0, pokemonName: '', spriteUrl: '', attempts: 1 })
   const [ranking, setRanking] = useState([])
   const [lastAttempts, setLastAttempts] = useState([]);
+  const navigate = useNavigate(); // <-- Agrega esto
+
+  // Redirección si no hay usuario logueado
+  useEffect(() => {
+    const user = JSON.parse(localStorage.getItem('user'));
+    if (!user || !user.idUser) {
+      navigate('/login');
+    }
+  }, [navigate]);
 
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem('user'));
@@ -78,8 +87,8 @@ function App() {
       setValue('');
       setContador(0);
       getLastAttempts(user.idUser)
-    .then(setLastAttempts)
-    .catch(() => setLastAttempts([]));
+        .then(setLastAttempts)
+        .catch(() => setLastAttempts([]));
 
     } else {
       setValue('');
@@ -109,10 +118,22 @@ function App() {
         .catch(() => setLastAttempts([]));
     }
   }
-  console.log('success', success)
+
+  // Cerrar sesión
+  function handleLogout() {
+    localStorage.removeItem('user');
+    navigate('/login');
+  }
 
   return (
     <main className="gap-5 bg-[url(https://wallpapers.com/images/featured/pokemon-hd-fazqcs1tmwwte1ap.jpg)] text-white flex flex-col justify-center items-center h-screen  bg-cover bg-center">
+      {/* Botón de cerrar sesión */}
+      <button
+        onClick={handleLogout}
+        className="absolute top-6 right-8 bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-4 rounded-md shadow-lg z-20"
+      >
+        Cerrar sesión
+      </button>
       <div class="flex flex-col justify-center items-center gap-5 p-4 bg-gradient-to-br from-orange-600 to-blue-700 shadow-xl rounded-2xl">
         <h1 className="text-6xl font-bold">Guess Pokémon</h1>
         <div className="container p-4 max-w-xs justify-center items-center flex flex-col gap-5 ">
@@ -208,8 +229,8 @@ function App() {
         </table>
       </div>
 
-      <div class="absolute right-0 top-8 border-5 border-solid border-yellow-600"
-        style={{ minWidth: 300, background: '#222', color: '#fff', borderRadius: 12, padding: 16, marginRight: 32 }}>
+      <div class="absolute left-0 bottom-8  border-5 border-solid border-blue-700"
+        style={{ minWidth: 300, background: '#222', color: '#fff', borderRadius: 12, padding: 16, marginLeft: 32 }}>
         <h2 style={{ textAlign: 'center', marginBottom: 12 }}>Tus últimos 5 Pokémon</h2>
         <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
           {lastAttempts.length === 0 && <li>No hay intentos recientes.</li>}
