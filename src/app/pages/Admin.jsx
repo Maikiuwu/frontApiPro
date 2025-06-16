@@ -63,48 +63,48 @@ export default function Admin() {
   const renderUserRow = (user) => (
     editingUser && editingUser.idUser === user.idUser ? (
       <tr key={user.idUser} className="bg-yellow-100">
-        <td>{user.idUser}</td>
-        <td>
+        <td className="text-left">{user.idUser}</td>
+        <td className="text-left">
           <input
             value={editingUser.username}
             onChange={e => setEditingUser({ ...editingUser, username: e.target.value })}
             className="border px-2"
           />
         </td>
-        <td>
+        <td className="text-left">
           <input
             value={editingUser.name}
             onChange={e => setEditingUser({ ...editingUser, name: e.target.value })}
             className="border px-2"
           />
         </td>
-        <td>
+        <td className="text-left">
           <input
             value={editingUser.lastName}
             onChange={e => setEditingUser({ ...editingUser, lastName: e.target.value })}
             className="border px-2"
           />
         </td>
-        <td>
+        <td className="text-left">
           <input
             value={editingUser.email}
             onChange={e => setEditingUser({ ...editingUser, email: e.target.value })}
             className="border px-2"
           />
         </td>
-        <td>
+        <td className="text-left">
           <button onClick={handleEditSave} className="bg-green-600 text-white px-2 rounded mr-2">Guardar</button>
           <button onClick={() => setEditingUser(null)} className="bg-gray-400 text-white px-2 rounded">Cancelar</button>
         </td>
       </tr>
     ) : (
       <tr key={user.idUser}>
-        <td>{user.idUser}</td>
-        <td>{user.username}</td>
-        <td>{user.name}</td>
-        <td>{user.lastName}</td>
-        <td>{user.email}</td>
-        <td>
+        <td className="text-left">{user.idUser}</td>
+        <td className="text-left">{user.username}</td>
+        <td className="text-left">{user.name}</td>
+        <td className="text-left">{user.lastName}</td>
+        <td className="text-left">{user.email}</td>
+        <td className="text-left">
           <button onClick={() => setEditingUser(user)} className="bg-yellow-500 text-white px-2 rounded mr-2">Editar</button>
           <button onClick={() => handleDelete(user)} className="bg-red-600 text-white px-2 rounded">Eliminar</button>
         </td>
@@ -134,7 +134,12 @@ export default function Admin() {
         <table className="w-full bg-white rounded shadow mb-6">
           <thead>
             <tr>
-              <th>ID</th><th>Username</th><th>Nombre</th><th>Apellido</th><th>Email</th><th>Acciones</th>
+              <th className="text-left">ID</th>
+              <th className="text-left">Username</th>
+              <th className="text-left">Nombre</th>
+              <th className="text-left">Apellido</th>
+              <th className="text-left">Email</th>
+              <th className="text-left">Acciones</th>
             </tr>
           </thead>
           <tbody>
@@ -145,7 +150,12 @@ export default function Admin() {
         <table className="w-full bg-white rounded shadow">
           <thead>
             <tr>
-              <th>ID</th><th>Username</th><th>Nombre</th><th>Apellido</th><th>Email</th><th>Acciones</th>
+              <th className="text-left">ID</th>
+              <th className="text-left">Username</th>
+              <th className="text-left">Nombre</th>
+              <th className="text-left">Apellido</th>
+              <th className="text-left">Email</th>
+              <th className="text-left">Acciones</th>
             </tr>
           </thead>
           <tbody>
