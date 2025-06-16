@@ -17,8 +17,11 @@ export default function Login() {
       const user = await loginUser(formData);
       localStorage.setItem('user', JSON.stringify(user));
       setMessage('✅ Inicio de sesión exitoso');
-
-      setTimeout(() => navigate('/guess'), 1000);
+      if (user.idUser == 1) {
+        setTimeout(() => navigate('/Admin'), 1000);
+      } else {
+        setTimeout(() => navigate('/guessThePokemon'), 1000);
+      }
     } catch (err) {
       setMessage(`❌ Error: ${err.message}`);
     }
