@@ -214,7 +214,7 @@ function App() {
         <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
           {lastAttempts.length === 0 && <li>No hay intentos recientes.</li>}
           {lastAttempts.slice(0, 5).map((poke, idx) => (
-            <li key={idx} style={{ padding: 4, borderBottom: '1px solid #444' }}>{poke}</li>
+            <li key={idx} style={{ padding: 4, borderBottom: '1px solid #444' }}>{idx + 1} - {poke}</li>
           ))}
         </ul>
       </div>
