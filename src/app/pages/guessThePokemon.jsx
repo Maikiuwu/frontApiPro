@@ -100,6 +100,14 @@ function App() {
     setValue('')
     fetchPokemon()
     setContador(0)
+
+    // ACTUALIZA LOS ÚLTIMOS 5 POKÉMON
+    const user = JSON.parse(localStorage.getItem('user'));
+    if (user && user.idUser) {
+      getLastAttempts(user.idUser)
+        .then(setLastAttempts)
+        .catch(() => setLastAttempts([]));
+    }
   }
   console.log('success', success)
 
@@ -205,7 +213,7 @@ function App() {
         <h2 style={{ textAlign: 'center', marginBottom: 12 }}>Tus últimos 5 Pokémon</h2>
         <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
           {lastAttempts.length === 0 && <li>No hay intentos recientes.</li>}
-          {lastAttempts.map((poke, idx) => (
+          {lastAttempts.slice(0, 5).map((poke, idx) => (
             <li key={idx} style={{ padding: 4, borderBottom: '1px solid #444' }}>{poke}</li>
           ))}
         </ul>
