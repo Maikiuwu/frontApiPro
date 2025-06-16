@@ -2,6 +2,8 @@ import generatePokemon from '../../services/generatePokemon'
 import GuardarIntentos from '../../services/GuardarIntentos'
 import ActualizarScore from '../../services/ActualizarScore'
 import { useState, useEffect } from 'react'
+import getLastAttempts from '../../services/getLastAttempts'
+
 
 import JSConfetti from 'js-confetti'
 
@@ -17,7 +19,16 @@ function App() {
   const [contador, setContador] = useState(1)
   const [formData, setFormData] = useState({ user: 0, pokemonName: '', spriteUrl: '', attempts: 1 })
   const [ranking, setRanking] = useState([])
+  const [lastAttempts, setLastAttempts] = useState([]);
 
+  useEffect(() => {
+    const user = JSON.parse(localStorage.getItem('user'));
+    if (user && user.idUser) {
+      getLastAttempts(user.idUser)
+        .then(setLastAttempts)
+        .catch(() => setLastAttempts([]));
+    }
+  }, []);
   const fetchPokemon = async () => {
     try {
       setLoading(true)
@@ -57,6 +68,7 @@ function App() {
         spriteUrl: image,
         attempts: contador + 1
       };
+
       setSuccess(true);
       jsConfetti.addConfetti();
       setFormData(newFormData);
@@ -65,6 +77,9 @@ function App() {
       ActualizarScore(user);
       setValue('');
       setContador(0);
+      getLastAttempts(user.idUser)
+    .then(setLastAttempts)
+    .catch(() => setLastAttempts([]));
 
     } else {
       setValue('');
@@ -183,6 +198,17 @@ function App() {
             ))}
           </tbody>
         </table>
+      </div>
+
+      <div class="absolute right-0 top-8 border-5 border-solid border-yellow-600"
+        style={{ minWidth: 300, background: '#222', color: '#fff', borderRadius: 12, padding: 16, marginRight: 32 }}>
+        <h2 style={{ textAlign: 'center', marginBottom: 12 }}>Tus últimos 5 Pokémon</h2>
+        <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
+          {lastAttempts.length === 0 && <li>No hay intentos recientes.</li>}
+          {lastAttempts.map((poke, idx) => (
+            <li key={idx} style={{ padding: 4, borderBottom: '1px solid #444' }}>{poke}</li>
+          ))}
+        </ul>
       </div>
     </main>
   )
