@@ -130,7 +130,7 @@ export default function Admin() {
 
       {message && <div className="mb-4 text-red-600">{message}</div>}
 
-      {searchResult ? (
+      {searchResult && searchResult.idUser !== 1 ? (
         <table className="w-full bg-white rounded shadow mb-6">
           <thead>
             <tr>
@@ -146,6 +146,8 @@ export default function Admin() {
             {renderUserRow(searchResult)}
           </tbody>
         </table>
+      ) : searchResult && searchResult.idUser === 1 ? (
+        <div className="mb-4 text-gray-600">No se puede mostrar el usuario admin.</div>
       ) : (
         <table className="w-full bg-white rounded shadow">
           <thead>
@@ -159,7 +161,9 @@ export default function Admin() {
             </tr>
           </thead>
           <tbody>
-            {users.map(renderUserRow)}
+            {users
+              .filter(u => u.idUser !== 1)
+              .map(renderUserRow)}
           </tbody>
         </table>
       )}
