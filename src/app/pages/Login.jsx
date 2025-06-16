@@ -20,7 +20,7 @@ export default function Login() {
       if (user.idUser == 1) {
         setTimeout(() => navigate('/Admin'), 1000);
       } else {
-        setTimeout(() => navigate('/guessThePokemon'), 1000);
+        setTimeout(() => navigate('/guess'), 1000);
       }
     } catch (err) {
       setMessage(`❌ Error: ${err.message}`);

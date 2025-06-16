@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom'
 
 const API_URL = 'http://localhost:8083/api/admin';
 
@@ -8,6 +9,7 @@ export default function Admin() {
   const [search, setSearch] = useState('');
   const [searchResult, setSearchResult] = useState(null);
   const [message, setMessage] = useState('');
+  const navigate = useNavigate();
 
   // Cargar todos los usuarios al iniciar
   useEffect(() => {
@@ -112,8 +114,20 @@ export default function Admin() {
     )
   );
 
+    // Cerrar sesión
+  function handleLogout() {
+    localStorage.removeItem('user');
+    navigate('/login');
+  }
+
   return (
-    <div className="min-h-screen bg-gray-100 p-8">
+    <div className="min-h-screen bg-red-100 p-8">
+      <button
+        onClick={handleLogout}
+        className="absolute top-6 right-8 bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-4 rounded-md shadow-lg z-20"
+      >
+        Cerrar sesión
+      </button>
       <h1 className="text-3xl font-bold mb-6">Panel de Administración de Usuarios</h1>
 
       <form onSubmit={handleSearch} className="mb-4 flex gap-2">
@@ -131,15 +145,15 @@ export default function Admin() {
       {message && <div className="mb-4 text-red-600">{message}</div>}
 
       {searchResult ? (
-        <table className="w-full bg-white rounded shadow mb-6">
+        <table className="w-full bg-pink-50 rounded shadow border-2 border-black mb-6">
           <thead>
             <tr>
-              <th className="text-left">ID</th>
-              <th className="text-left">Username</th>
-              <th className="text-left">Nombre</th>
-              <th className="text-left">Apellido</th>
-              <th className="text-left">Email</th>
-              <th className="text-left">Acciones</th>
+              <th className="text-left border-b-2 border-black">ID</th>
+              <th className="text-left border-b-2 border-black">Username</th>
+              <th className="text-left border-b-2 border-black">Nombre</th>
+              <th className="text-left border-b-2 border-black">Apellido</th>
+              <th className="text-left border-b-2 border-black">Email</th>
+              <th className="text-left border-b-2 border-black">Acciones</th>
             </tr>
           </thead>
           <tbody>
@@ -147,15 +161,15 @@ export default function Admin() {
           </tbody>
         </table>
       ) : (
-        <table className="w-full bg-white rounded shadow">
+        <table className="w-full bg-pink-50 rounded shadow border-2 border-black">
           <thead>
             <tr>
-              <th className="text-left">ID</th>
-              <th className="text-left">Username</th>
-              <th className="text-left">Nombre</th>
-              <th className="text-left">Apellido</th>
-              <th className="text-left">Email</th>
-              <th className="text-left">Acciones</th>
+              <th className="text-left border-b-2 border-black">ID</th>
+              <th className="text-left border-b-2 border-black">Username</th>
+              <th className="text-left border-b-2 border-black">Nombre</th>
+              <th className="text-left border-b-2 border-black">Apellido</th>
+              <th className="text-left border-b-2 border-black">Email</th>
+              <th className="text-left border-b-2 border-black">Acciones</th>
             </tr>
           </thead>
           <tbody>
