@@ -127,13 +127,21 @@ function App() {
 
   return (
     <main className="gap-5 bg-[url(https://wallpapers.com/images/featured/pokemon-hd-fazqcs1tmwwte1ap.jpg)] text-white flex flex-col justify-center items-center h-screen  bg-cover bg-center">
-      {/* Botón de cerrar sesión */}
-      <button
-        onClick={handleLogout}
-        className="absolute top-6 right-8 bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-4 rounded-md shadow-lg z-20"
-      >
-        Cerrar sesión
-      </button>
+      {/* Botones de navegación */}
+      <div className="absolute top-6 right-8 flex gap-4 z-20">
+        <button
+          onClick={() => navigate('/profile')}
+          className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-md shadow-lg"
+        >
+          Mi Perfil
+        </button>
+        <button
+          onClick={handleLogout}
+          className="bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-4 rounded-md shadow-lg"
+        >
+          Cerrar sesión
+        </button>
+      </div>
       <div class="flex flex-col justify-center items-center gap-5 p-4 bg-gradient-to-br from-orange-600 to-blue-700 shadow-xl rounded-2xl">
         <h1 className="text-6xl font-bold">Guess Pokémon</h1>
         <div className="container p-4 max-w-xs justify-center items-center flex flex-col gap-5 ">

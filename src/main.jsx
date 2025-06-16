@@ -6,6 +6,7 @@ import './styles/index.css';
 import Register from './app/pages/Register';
 import Login from './app/pages/Login';
 import GuessThePokemon from './app/pages/guessThePokemon';
+import Profile from './app/pages/Profile';
 
 const isAuthenticated = () => !!localStorage.getItem('user');
 
@@ -22,6 +23,10 @@ createRoot(document.getElementById('root')).render(
         <Route
           path="/guess"
           element={<ProtectedRoute><GuessThePokemon /></ProtectedRoute>}
+        />
+        <Route
+          path="/profile"
+          element={<ProtectedRoute><Profile /></ProtectedRoute>}
         />
         <Route
           path="/"
