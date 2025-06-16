@@ -90,7 +90,7 @@ function App() {
 
   return (
     <main className="gap-5 bg-[url(https://wallpapers.com/images/featured/pokemon-hd-fazqcs1tmwwte1ap.jpg)] text-white flex flex-col justify-center items-center h-screen  bg-cover bg-center">
-      <div class="flex flex-col justify-center items-center gap-5 p-4 bg-gradient-to-br from-blue-600 to-purple-800 shadow-xl rounded-2xl">
+      <div class="flex flex-col justify-center items-center gap-5 p-4 bg-gradient-to-br from-orange-600 to-blue-700 shadow-xl rounded-2xl">
         <h1 className="text-6xl font-bold">Guess Pokémon</h1>
         <div className="container p-4 max-w-xs justify-center items-center flex flex-col gap-5 ">
           {loading ? (
@@ -128,7 +128,7 @@ function App() {
             >
               <input
                 type="text"
-                className="h-12 text-lg border border-gray-500 bg-gray-500/30 rounded-xl min-w-xs px-2"
+                className="h-12 text-lg border border-gray-800 bg-gray-500/30 rounded-xl min-w-xs px-2 text-black"
                 placeholder="Escribe el nombre del Pokémon"
                 onChange={(e) => setValue(e.target.value)}
                 value={value}
@@ -163,7 +163,7 @@ function App() {
         </div>
 
       </div>
-      <div class="absolute left-0 top-8 border-2 border-s-cyan-950" style={{ minWidth: 300, background: '#222', color: '#fff', borderRadius: 12, padding: 16, marginLeft: 32 }}>
+      <div class="absolute left-0 top-8 border-5 border-solid border-green-600" style={{ minWidth: 300, background: '#222', color: '#fff', borderRadius: 12, padding: 16, marginLeft: 32 }}>
         <h2 style={{ textAlign: 'center', marginBottom: 12 }}>Top 10 Usuarios</h2>
         <table style={{ width: '100%' }}>
           <thead>
