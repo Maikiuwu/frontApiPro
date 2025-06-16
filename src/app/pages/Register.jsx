@@ -36,7 +36,7 @@ export default function Register() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-900">
+    <div className="min-h-screen flex items-center justify-center bg-[url(https://images8.alphacoders.com/548/thumb-1920-548142.jpg)]  bg-cover bg-center bg-gray-900">
       <div className="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-lg w-full max-w-md">
         <h2 className="text-2xl font-bold mb-6 text-center text-gray-800 dark:text-white">Registro de Usuario</h2>
         <form onSubmit={handleSubmit} className="space-y-4">
