@@ -68,28 +68,36 @@ function App() {
     const isCorrect = inputName.trim().toLowerCase() === name.toLowerCase();
 
     if (isCorrect) {
-
       const user = JSON.parse(localStorage.getItem('user'));
 
-      const newFormData = {
-        user: user,
-        pokemonName: name,
-        spriteUrl: image,
-        attempts: contador + 1
-      };
+      // Verificar si el Pokémon ya existe en lastAttempts
+      const pokemonExists = lastAttempts.some(poke => poke.toLowerCase() === name.toLowerCase());
 
-      setSuccess(true);
-      jsConfetti.addConfetti();
-      setFormData(newFormData);
-      console.log('formData', newFormData);
-      GuardarIntentos(newFormData);
-      ActualizarScore(user);
-      setValue('');
-      setContador(0);
-      getLastAttempts(user.idUser)
-        .then(setLastAttempts)
-        .catch(() => setLastAttempts([]));
+      if (!pokemonExists) {
+        const newFormData = {
+          user: user,
+          pokemonName: name,
+          spriteUrl: image,
+          attempts: contador + 1
+        };
 
+        setSuccess(true);
+        jsConfetti.addConfetti();
+        setFormData(newFormData);
+        console.log('formData', newFormData);
+        GuardarIntentos(newFormData);
+        ActualizarScore(user);
+        setValue('');
+        setContador(0);
+        getLastAttempts(user.idUser)
+          .then(setLastAttempts)
+          .catch(() => setLastAttempts([]));
+      } else {
+        setSuccess(true);
+        jsConfetti.addConfetti();
+        setValue('');
+        setContador(0);
+      }
     } else {
       setValue('');
       setShowErrorModal(true);
