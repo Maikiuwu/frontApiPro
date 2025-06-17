@@ -6,6 +6,7 @@ import getLastAttempts from '../../services/getLastAttempts'
 import { useNavigate } from 'react-router-dom' // <-- Agrega esto
 
 import JSConfetti from 'js-confetti'
+import addFavorite from '../../services/addFavorite'
 
 const jsConfetti = new JSConfetti()
 
@@ -18,8 +19,9 @@ function App() {
   const [showErrorModal, setShowErrorModal] = useState(false)
   const [contador, setContador] = useState(1)
   const [formData, setFormData] = useState({ user: 0, pokemonName: '', spriteUrl: '', attempts: 1 })
-  const [ranking, setRanking] = useState([])
+  const [ranking, setRanking] = useState([]);
   const [lastAttempts, setLastAttempts] = useState([]);
+  const [favMessage, setFavMessage] = useState('');
   const navigate = useNavigate(); // <-- Agrega esto
 
   // Redirección si no hay usuario logueado
@@ -53,11 +55,15 @@ function App() {
     }
   }
 
-  useEffect(() => {
+  const fetchRanking = () => {
     fetch('http://localhost:8083/api/users/ranking')
       .then(res => res.json())
       .then(data => setRanking(data))
       .catch(() => setRanking([]));
+  };
+
+  useEffect(() => {
+    fetchRanking();
   }, []);
 
   const handleGuess = (inputName) => {
@@ -81,7 +87,6 @@ function App() {
       setSuccess(true);
       jsConfetti.addConfetti();
       setFormData(newFormData);
-      console.log('formData', newFormData);
       GuardarIntentos(newFormData);
       ActualizarScore(user);
       setValue('');
@@ -89,7 +94,7 @@ function App() {
       getLastAttempts(user.idUser)
         .then(setLastAttempts)
         .catch(() => setLastAttempts([]));
-
+      fetchRanking(); // <-- Actualiza el ranking aquí
     } else {
       setValue('');
       setShowErrorModal(true);
@@ -124,6 +129,23 @@ function App() {
     localStorage.removeItem('user');
     navigate('/login');
   }
+
+  const handleAddFavorite = async () => {
+    const user = JSON.parse(localStorage.getItem('user'));
+    if (!user) return;
+    try {
+      await addFavorite({
+        user: { idUser: user.idUser }, // SOLO el idUser
+        pokemonName: name,
+        spriteUrl: image,
+      });
+      setFavMessage('¡Agregado a favoritos!');
+      setTimeout(() => setFavMessage(''), 2000);
+    } catch {
+      setFavMessage('Ya está en favoritos o hubo un error.');
+      setTimeout(() => setFavMessage(''), 2000);
+    }
+  };
 
   return (
     <main className="gap-5 bg-[url(https://wallpapers.com/images/featured/pokemon-hd-fazqcs1tmwwte1ap.jpg)] text-white flex flex-col justify-center items-center h-screen  bg-cover bg-center">
@@ -206,6 +228,19 @@ function App() {
               {loading ? 'Cargando...' : 'Generar nuevo pokémon'}
             </button>
           </div>
+        </div>
+        <div className="flex flex-col items-center gap-2">
+          {success && (
+            <button
+              onClick={handleAddFavorite}
+              className="bg-yellow-500 hover:bg-yellow-600 text-black font-semibold py-2 px-4 rounded shadow"
+            >
+              Agregar a favoritos
+            </button>
+          )}
+          {favMessage && (
+            <span className="text-green-300 text-sm">{favMessage}</span>
+          )}
         </div>
         <div
           className={`flex flex-col gap-5 p-4 bg-red-500 size-40 absolute text-5xl justify-center items-center rounded-xl shadow-xl opacity-0 transition-opacity duration-300 z-10 ${showErrorModal ? 'opacity-100' : ''

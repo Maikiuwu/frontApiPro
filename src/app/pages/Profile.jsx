@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import getLastAttempts from '../../services/getLastAttempts';
+import getFavorites from '../../services/getFavorites';
 
 export default function Profile() {
   const [userProfile, setUserProfile] = useState(null);
@@ -8,11 +9,12 @@ export default function Profile() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [pokemonData, setPokemonData] = useState({});
+  const [favorites, setFavorites] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem('user'));
-    
+
     if (!user || !user.idUser) {
       console.log('No hay usuario en localStorage');
       navigate('/login');
@@ -42,6 +44,14 @@ export default function Profile() {
       })
   }, [navigate]);
 
+  useEffect(() => {
+    const user = JSON.parse(localStorage.getItem('user'));
+    // ...existing code...
+    getFavorites(user)
+      .then(setFavorites)
+      .catch(() => setFavorites([]));
+  }, [navigate]);
+
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-[url(https://wallpapers.com/images/featured/pokemon-hd-fazqcs1tmwwte1ap.jpg)] bg-cover bg-center">
@@ -50,11 +60,22 @@ export default function Profile() {
     );
   }
 
+  function getPokemonIdFromSpriteUrl(url) {
+    const match = url.match(/\/(\d+)\.png$/);
+    return match ? match[1] : '';
+  }
+
+  const sortedFavorites = [...favorites].sort((a, b) => {
+    const idA = parseInt(getPokemonIdFromSpriteUrl(a.spriteUrl));
+    const idB = parseInt(getPokemonIdFromSpriteUrl(b.spriteUrl));
+    return idA - idB; // ascendente
+  });
+
   return (
-    <main className="min-h-screen bg-[url(https://wallpapers.com/images/featured/pokemon-hd-fazqcs1tmwwte1ap.jpg)] bg-cover bg-center">
+    <main className="min-h-screen bg-gradient-to-br from-blue-900 to-orange-700 shadow-xl- bg-cover bg-center">
       <div className="container mx-auto px-4 py-8">
         <div className="flex justify-between items-center mb-8">
-          <h1 className="text-4xl font-bold text-white">Mi Perfil</h1>
+          <h1 className="text-4xl font-bold text-white">Mi PokePerfil</h1>
           <div className="space-x-4">
             <button
               onClick={() => navigate('/guess')}
@@ -102,49 +123,55 @@ export default function Profile() {
 
           {/* Últimos Intentos */}
           <div className="bg-gray-800/80 p-6 rounded-xl shadow-xl">
-            <h2 className="text-2xl font-bold text-white mb-4">Últimos Pokémon Adivinados</h2>
+            <h2 className="text-2xl font-bold text-white mb-4">Últimos 5 pokemones Adivinados</h2>
             <ul className="space-y-2">
               {lastAttempts.length === 0 ? (
                 <li className="text-white">No hay intentos recientes</li>
               ) : (
-                lastAttempts.slice(0, 5).map((pokemon, index) => (
-                  <li key={index} className="text-white border-b border-gray-700 pb-2">
-                    {index + 1}. {pokemon}
-                  </li>
-                ))
+                <ul>
+                  {lastAttempts.map((pokemon, index) => (
+                    <li key={index} className="text-white border-b border-gray-700 pb-2">
+                      {index + 1}. {pokemon}
+                    </li>
+                  ))}
+                </ul>
               )}
             </ul>
           </div>
         </div>
 
-        {/* Pokédex */}
-        <div className="bg-gray-800/80 p-6 rounded-xl shadow-xl">
-          <h2 className="text-2xl font-bold text-white mb-6 text-center">Mi Pokédex</h2>
-          {lastAttempts.length === 0 ? (
-            <p className="text-white text-center">No has adivinado ningún Pokémon todavía</p>
+
+        <div className="Favoritos bg-gray-800/80 p-6 rounded-xl shadow-xl mb-3">
+          <h2 className="text-2xl font-bold text-white mb-6 text-center">Mis favoritos</h2>
+          {sortedFavorites.length === 0 ? (
+            <div className="text-white text-center">No tienes favoritos aún.</div>
           ) : (
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
-              {lastAttempts.map((pokemon, index) => (
-                <div key={index} className="bg-gray-700/50 rounded-lg p-4 transform transition-transform hover:scale-105">
-                  <div className="aspect-square bg-gray-600 rounded-lg mb-2 flex items-center justify-center">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+              {sortedFavorites.map((fav, idx) => {
+                const pokemonId = getPokemonIdFromSpriteUrl(fav.spriteUrl);
+                return (
+                  <div key={idx} className="bg-gray-500 rounded-xl shadow-lg flex flex-col items-center p-4">
                     <img
-                      src={pokemonData[pokemon]?.image || 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/1.png'}
-                      alt={pokemon}
-                      className="w-full h-full object-contain"
-                      onError={(e) => {
-                        e.target.onerror = null;
-                        e.target.src = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/1.png';
-                      }}
+                      src={fav.spriteUrl}
+                      alt={fav.pokemonName}
+                      className="w-24 h-24 object-contain mb-2"
                     />
+                    <div className="text-white font-bold text-lg">
+                      {fav.pokemonName?.charAt(0).toUpperCase() + fav.pokemonName?.slice(1)}
+                    </div>
+                    <div className="text-white text-sm">#{pokemonId}</div>
                   </div>
-                  <p className="text-white text-center font-semibold capitalize">{pokemon}</p>
-                  <p className="text-gray-400 text-center text-sm">#{pokemonData[pokemon]?.id || '?'}</p>
-                </div>
-              ))}
+                );
+              })}
             </div>
           )}
+        </div>
+
+        <div className="Pokedex bg-gray-800/80 p-6 rounded-xl shadow-xl">
+          <h2 className="text-2xl font-bold text-white mb-6 text-center">Mi Pokédex</h2>
+
         </div>
       </div>
     </main>
   );
-} 
+}
