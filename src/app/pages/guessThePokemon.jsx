@@ -79,19 +79,6 @@ function App() {
       // Verificar si el Pokémon ya existe en lastAttempts
       const pokemonExists = lastAttempts.some(poke => poke.toLowerCase() === name.toLowerCase());
 
-<<<<<<< HEAD
-      setSuccess(true);
-      jsConfetti.addConfetti();
-      setFormData(newFormData);
-      GuardarIntentos(newFormData);
-      ActualizarScore(user);
-      setValue('');
-      setContador(0);
-      getLastAttempts(user.idUser)
-        .then(setLastAttempts)
-        .catch(() => setLastAttempts([]));
-      fetchRanking(); // <-- Actualiza el ranking aquí
-=======
       if (!pokemonExists) {
         const newFormData = {
           user: user,
@@ -117,7 +104,6 @@ function App() {
         setValue('');
         setContador(0);
       }
->>>>>>> ee5f46f0405a556722a0a731a6662ec22071b071
     } else {
       setValue('');
       setShowErrorModal(true);
