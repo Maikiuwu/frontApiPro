@@ -129,7 +129,7 @@ export default function Profile() {
                 <li className="text-white">No hay intentos recientes</li>
               ) : (
                 <ul>
-                  {lastAttempts.map((pokemon, index) => (
+                  {lastAttempts.slice(0, 5).map((pokemon, index) => (
                     <li key={index} className="text-white border-b border-gray-700 pb-2">
                       {index + 1}. {pokemon}
                     </li>
