@@ -25,7 +25,6 @@ export default function Profile() {
 
     getLastAttempts(user.idUser)
       .then(attempts => {
-        console.log('Datos de intentos recibidos:', attempts);
         setLastAttempts(attempts);
         // Obtener datos de cada Pokémon
         attempts.forEach(pokemon => {
@@ -46,7 +45,6 @@ export default function Profile() {
         });
       })
       .catch(error => {
-        console.error('Error al obtener intentos:', error);
         setError('Error al cargar los intentos recientes');
       });
   }, [navigate]);
