@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import getLastAttempts from '../../services/getLastAttempts';
 import getFavorites from '../../services/getFavorites';
+import { removeFavorites } from '../../services/EliminarFavorito';
 
 export default function Profile() {
   const [userProfile, setUserProfile] = useState(null);
@@ -43,6 +44,8 @@ export default function Profile() {
         });
       })
   }, [navigate]);
+
+
 
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem('user'));
@@ -129,7 +132,7 @@ export default function Profile() {
                 <li className="text-white">No hay intentos recientes</li>
               ) : (
                 <ul>
-                  {lastAttempts.map((pokemon, index) => (
+                  {lastAttempts.slice(0, 5).map((pokemon, index) => (
                     <li key={index} className="text-white border-b border-gray-700 pb-2">
                       {index + 1}. {pokemon}
                     </li>
@@ -160,6 +163,28 @@ export default function Profile() {
                       {fav.pokemonName?.charAt(0).toUpperCase() + fav.pokemonName?.slice(1)}
                     </div>
                     <div className="text-white text-sm">#{pokemonId}</div>
+                    <button
+                      className="mt-2 bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded"
+                      onClick={async () => {
+
+                        const body = {
+                          user: { idUser: userProfile.idUser },
+                          pokemonName: fav.pokemonName,
+                        };
+
+                        try {
+                          await removeFavorites(body);
+
+                          // Actualiza la lista de favoritos después de eliminar
+                          setFavorites(favorites.filter(f => f.pokemonName !== fav.pokemonName));
+                        } catch (error) {
+                          console.error('Error al eliminar favorito:', error);
+                          alert('No se pudo eliminar el favorito');
+                        }
+                      }}
+                    >
+                      Eliminar
+                    </button>
                   </div>
                 );
               })}
