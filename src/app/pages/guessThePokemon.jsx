@@ -17,7 +17,7 @@ function App() {
   const [success, setSuccess] = useState(false)
   const [value, setValue] = useState('')
   const [showErrorModal, setShowErrorModal] = useState(false)
-  const [contador, setContador] = useState(1)
+  const [contador, setContador] = useState(0)
   const [formData, setFormData] = useState({ user: 0, pokemonName: '', spriteUrl: '', attempts: 1 })
   const [ranking, setRanking] = useState([]);
   const [lastAttempts, setLastAttempts] = useState([]);
